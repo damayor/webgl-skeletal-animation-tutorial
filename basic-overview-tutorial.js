@@ -3,6 +3,10 @@
 *  Computación Visual Interactiva
 *  Proyecto de profundización -  Animación Esqueletica
 *  David Ricardo Mayorga H.
+*
+*   bajo el tag 'drmayo' se encuentram los comentarios en español que permiten entender cada función o parte del codigo
+*   El tag @relevante comenta las partes clave del código que influyen en todo el resultado del la animación esquelética
+*
 **/ 
 
 
@@ -155,12 +159,18 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 					}
 				}).joints
 
+                /**
+                * drmayo
+                * Agregar los datos de cada articulacion ya del tiempo actual como variable uniforme
+                * Cada vertice va a ser renderizado con base a estos puntos
+                **/
 				// Add our joint's quaternions into our uniform data to pass to our vertex shader
 				for (var i = 0; i < 18; i++) {
 					uniforms['boneRotQuaternions' + i] = interpolatedJoints[i].slice(0, 4)
-						uniforms['boneTransQuaternions' + i] = interpolatedJoints[i].slice(4, 8)
+					uniforms['boneTransQuaternions' + i] = interpolatedJoints[i].slice(4, 8)
 				}
 
+              
 				// We run a function that sets up and calls `gl.drawElements` in order to
 				// draw our model onto the page
 				cowboyModel.draw({
@@ -606,7 +616,11 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 			return out;
 		};
 	}, {}
-], 12: [function (require, module, exports) {
+], 
+    /**
+    *  Conversion matematica de un matrix 3x3 a un quaternion
+    **/
+    12: [function (require, module, exports) {
 		module.exports = fromMat3
 
 			/**
@@ -796,7 +810,7 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 
 			module.exports = convertKeyframesToDualQuats
             /**
-            * drmayo - convierte cada matriz de cada keyframe en quaterniones dobles
+            * drmayo @relevante - convierte cada matriz de cada keyframe en quaterniones dobles
             **/
 			/**
 			 * Convert an object with keyframe joint matrix arrays into joint
@@ -987,7 +1001,7 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 	}
     
     /**
-    * drmayo importa los datos y crea los textos en Javascript para que las variables uniformes sean asociadas 
+    * drmayo Importa los datos y crea los textos en Javascript para que las variables uniformes sean asociadas 
     * y los atributos sean pintados
     **/
 ], 21: [function (require, module, exports) {
@@ -1096,6 +1110,9 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 						return allUniformsString
 				}, '')
 
+                /**
+                *  drmayo @relevante  - String para pintar todos los triangulos!!
+                **/
 				var elementsStatement = `
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elementBuffer)
     gl.drawElements(gl.TRIANGLES, numIndices, gl.UNSIGNED_SHORT, 0)
@@ -1245,7 +1262,12 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		}
 
 	}, {}
-], 24: [function (require, module, exports) {
+], 
+    /**
+    * drmayo -  @relevant No solo carga el DAE sino que tambien los shaders,
+    *           creando y cargando los buffers con sus respectivos datos del JSON cargado
+    **/
+    24: [function (require, module, exports) {
 		var generateShader = require('./shader/generate-shader.js')
 			var drawModel = require('./draw-model.js')
 			var expandVertices = require('./expand-vertices.js')
@@ -1296,7 +1318,9 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 					textures[0] = initTexture(gl, loadOpts)
 			}
 
-			var drawModel2 = createDrawFunction(gl, shader.program, shader.attributes, shader.uniforms, vertexPositionIndexBuffer, modelJSON.vertexPositionIndices.length, textures)
+           
+			var drawModel2 = createDrawFunction(gl, shader.program, shader.attributes, shader.uniforms,
+            vertexPositionIndexBuffer, modelJSON.vertexPositionIndices.length, textures)
 
 				return {
 				draw: drawModel2 || drawModel.bind(null, gl, bufferData),
@@ -1634,7 +1658,7 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 	}, {}
     
     /**
-    * drmayo funcion clave!! convierte una matriz 4*4 a dos cuaterniones
+    * drmayo @relevante Convierte una matriz 4*4 a dos cuaterniones
     *
     * @return dos cuaterniones el primero de rotacion, el segundo de traslacion
     **/
@@ -1660,6 +1684,7 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
                 rotationQuat[0],
                 rotationQuat[1],
                 rotationQuat[2],
+                rotationQuat[3],
                 rotationQuat[3],
                 transQuat[0],
                 transQuat[1],
@@ -1898,7 +1923,7 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 	}
 ], 
     /**
-    * drmayo funcion clave: interpolacion entre dos cuaterniones
+    * drmayo @relevante interpolacion entre dos cuaterniones
     **/
     34: [function (require, module, exports) {
 		// TODO: Pull this out into it's standalone own open source repo
@@ -2066,6 +2091,10 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 			// keyframe times
 			var currentAnimElapsedTime = opts.currentTime - opts.currentAnimation.startTime
 
+            
+                /**
+                *  drmayo - Ordenar laos keyframes ya que vienen en desorden desde el JSON
+                **/
 				// Sort all of our animations keyframe times numerically so that
 				// they're next to each other when we're sampling them.
 				// ex: {1: [...], '6.5': [...], 2: [...]} becomes [1, 2, 6.5]
@@ -2091,6 +2120,10 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 				// Our duration is the number of seconds from the first keyframe time to the last
 				// in our current animation. So for a current animation of [1, 2, 6.5] our duration is 4.5
 				var duration = currentKeyframeTimes[currentKeyframeTimes.length - 1] - currentKeyframeTimes[0]
+                
+                /**
+                * drmayo - implementacion del loop
+                **/
 				if (currentAnimElapsedTime > duration) {
 					// If we are NOT LOOPING then we set our upper bound of elapsed time to the duration of the animation
 					if (opts.currentAnimation.noLoop) {
@@ -2122,6 +2155,10 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 					}
 				})
 				// Set the elapsed time relative to our current lower bound keyframe instead of our lowest out of all keyframes
+                
+                /**
+                * drmayo calculo del factor entre keyframes
+                **/
 				currentAnimElapsedTime = timeRelativeToFirst - currentAnimLowerKeyframe
 
 				var previousAnimLowerKeyframe
@@ -2148,6 +2185,10 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 							// If our current frame happens to be one of our defined keyframes we use the existing frame
 							previousAnimJointDualQuat = opts.keyframes[previousAnimLowerKeyframe][jointName]
 						} else {
+                            
+                            /**
+                            * drmayo @relevante - Interpolacion de los cuaterniones de todas las articulaciones entre keyframe y keyframe
+                            **/
 							// Blend the dual quaternions for our previous animation that we are about to blend out
 							previousAnimJointDualQuat = blendDualQuaternions(
 									[],
