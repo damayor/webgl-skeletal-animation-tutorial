@@ -1,3 +1,12 @@
+/**
+*  Universidad de los Andes
+*  Computación Visual Interactiva
+*  Proyecto de profundización -  Animación Esqueletica
+*  David Ricardo Mayorga H.
+**/ 
+
+
+
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})(
 {
     1:[function(require,module,exports){
@@ -18,7 +27,7 @@ var canvas = document.createElement('canvas')
 
 	// Get our WebGL Context that we'll use to pass data to the GPU
 	/**
-	 * - CVI - drmayor - Componente WebGL como se ha visto en cualquier proyecto
+	 * - CVI - drmayo - Componente WebGL como se ha visto en cualquier proyecto
 	 **/
 	var gl = canvas.getContext('webgl')
 	gl.enable(gl.DEPTH_TEST)
@@ -26,7 +35,7 @@ var canvas = document.createElement('canvas')
 	// We create an input slider that will control our animations playback speed
 	// You can drag this slider to view the animation in either slow or fast motion
 	/**
-	 * - CVI - drmayor - playbackSlider: slider para ralentizar o acelerar animacion
+	 * - CVI - drmayo - playbackSlider: slider para ralentizar o acelerar animacion
 	 **/
 	var playbackSlider = document.createElement('input')
 	playbackSlider.type = 'range'
@@ -49,7 +58,7 @@ var canvas = document.createElement('canvas')
 
 // We insert our canvas and controls into the page
 /**
-* drmayor - Inserta el canvas en el template
+* drmayo - Inserta el canvas en el template
 **/
 var demoLocation = document.querySelector('#skeletal-animation-tutorial') || document.body
 	demoLocation.appendChild(canvas)
@@ -58,7 +67,7 @@ var demoLocation = document.querySelector('#skeletal-animation-tutorial') || doc
 
 	// Grab our model's JSON data that we'll use to know how to render it
 	/**
-	 * - CVI - drmayor - cowboyJSON toda la informaci�n del personaje: articulaciones y posiciones por keyframe y coordenadas UV
+	 * - CVI - drmayo - cowboyJSON toda la informacion del personaje: articulaciones y posiciones por keyframe y coordenadas UV
 	 **/
 
 	var cowboyJSON = require('./cowboy.json')
@@ -67,7 +76,7 @@ var demoLocation = document.querySelector('#skeletal-animation-tutorial') || doc
 	// see: https://www.cs.utah.edu/~ladislav/kavan07skinning/kavan07skinning.pdf
 
 	/**
-	 * - CVI - drmayor - Matrices de las articulaciones [1x16] son transformadas a cuaterniones dobles []
+	 * - CVI - drmayo - Matrices de las articulaciones [1x16] son transformadas a cuaterniones dobles []
 	 **/
 
 	var keyframesToDualQ uats = require('keyframes-to-dual-quats')
@@ -97,21 +106,25 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 	// animation every time the browser is ready for a new frame
 
 	/**
-	 * - CVI - drmayor  - renderLoop: renderiza en cada frame. En otras palabras realiza la animacion.
+	 * - CVI - drmayo  - renderLoop: renderiza en cada frame. En otras palabras realiza la animacion.
 	 **/
 	var renderLoop = require('raf-loop')
 
 	/**
-	 * - CVI - drmayor  - anymationSystem el resultado de la magia de la esqueletizacion
+	 * - CVI - drmayo  - anymationSystem el resultado de la magia de la esqueletizacion
 	 **/
 	var animationSystem = require('skeletal-animation-system')
 
+    
+    /**
+    *  drmayo - llama a la funcion Engine.start() 
+    **/
 	renderLoop(function (millisecondsSinceLastRender) {
 		// We don't try to draw our model until it's been loaded
 		if (cowboyModel) {
 
 			/**
-			 * - CVI - drmayor- variables uniformes del shader como las matrices ModelView y Perspective o las propiedades de la luz
+			 * - CVI - drmayo- variables uniformes del shader como las matrices ModelView y Perspective o las propiedades de la luz
 			 **/
 			var uniforms = {
 				// Whether or not we want our shader to calculate per-vertex lighting
@@ -131,7 +144,7 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 			secondsElapsed += millisecondsSinceLastRender * playbackSpeed / 1000
 			realElapsed += millisecondsSinceLastRender / 1000
 
-			// CVI  - drmayor - Interpola los joints de acuerdo al tiempo y a los cuaterniones de cada joint en un keyframe especifico.
+			// CVI  - drmayo - Interpola los joints de acuerdo al tiempo y a los cuaterniones de cada joint en un keyframe especifico.
 			var interpolatedJoints = animationSystem.interpolateJoints({
 					currentTime: secondsElapsed,
 					keyframes: cowboyJSON.keyframes,
@@ -175,7 +188,7 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 			//  information to automatically retrieve a shader's
 			//  uniform and attribute locations
 			/**
-			 *  drmayor
+			 *  drmayo
 			 **/
 		function getAttributesUniforms(shaderString) {
 			// All attribute and uniform definitions come before
@@ -229,7 +242,7 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		module.exports = fromMat4
 
         /**
-         *  drmayor funciones de manejo de matrices
+         *  drmayo funciones de manejo de matrices
          **/
 
         /**
@@ -782,7 +795,9 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		var mat4ToDualQuat = require('mat4-to-dual-quat')
 
 			module.exports = convertKeyframesToDualQuats
-
+            /**
+            * drmayo - convierte cada matriz de cada keyframe en quaterniones dobles
+            **/
 			/**
 			 * Convert an object with keyframe joint matrix arrays into joint
 			 * dual quaternion arrays. Useful when paired with `collada-dae-parser`
@@ -827,6 +842,11 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 	}, {
 		"mat4-to-dual-quat": 28
 	}
+    
+    /**
+    * drmayo: dibuja la escena con todas las matrices necesarias.
+    *   Crea los buffers e importa los datos 
+    **/
 ], 20: [function (require, module, exports) {
 		var mat4Create = require('gl-mat4/create')
 			var mat4Multiply = require('gl-mat4/multiply')
@@ -965,6 +985,11 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		"gl-vec3/normalize": 15,
 		"gl-vec3/scale": 16
 	}
+    
+    /**
+    * drmayo importa los datos y crea los textos en Javascript para que las variables uniformes sean asociadas 
+    * y los atributos sean pintados
+    **/
 ], 21: [function (require, module, exports) {
 		// We use this when auto generating our draw function code. This map
 		// helps us determine the size of attributes and the function that we need
@@ -1187,6 +1212,10 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		}
 
 	}, {}
+    
+    /**
+    * drmayo - inicializa y carga una textura
+    **/
 ], 23: [function (require, module, exports) {
 		module.exports = initTexture
 
@@ -1296,6 +1325,9 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		"./init-texture.js": 23,
 		"./shader/generate-shader.js": 26
 	}
+    /**
+    * drmayo crea la cadena del fragment Shader en GLSL
+    **/
 ], 25: [function (require, module, exports) {
 		module.exports = generateFragmentShader
 
@@ -1344,6 +1376,10 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		}
 
 	}, {}
+    
+    /**
+    * drmayor - Genera el shader con los strings de ambos shaders
+    **/
 ], 26: [function (require, module, exports) {
 		var generateFragmentShader = require('./generate-fragment-shader.js')
 			var generateVertexShader = require('./generate-vertex-shader.js')
@@ -1446,6 +1482,10 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		"./generate-vertex-shader.js": 27,
 		"get-attributes-uniforms": 3
 	}
+    
+    /**
+    * drmayo crea la cadena del fragment Shader en GLSL
+    **/
 ], 27: [function (require, module, exports) {
 		module.exports = generateVertexShader
 
@@ -1592,33 +1632,40 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		}
 
 	}, {}
+    
+    /**
+    * drmayo funcion clave!! convierte una matriz 4*4 a dos cuaterniones
+    *
+    * @return dos cuaterniones el primero de rotacion, el segundo de traslacion
+    **/
 ], 28: [function (require, module, exports) {
 		var mat3FromMat4 = require('gl-mat3/from-mat4')
-			var quatMultiply = require('gl-quat/multiply')
-			var quatFromMat3 = require('gl-quat/fromMat3')
-			var quatScale = require('gl-quat/scale')
+        var quatMultiply = require('gl-quat/multiply')
+        var quatFromMat3 = require('gl-quat/fromMat3')
+        var quatScale = require('gl-quat/scale')
 
-			module.exports = convertMatrixToDualQuat
+        module.exports = convertMatrixToDualQuat
 
-			// Convert a 4x4 matrix4x4 into a dual quaternion
-			//  recommended reading: https://www.cs.utah.edu/~ladislav/kavan07skinning/kavan07skinning.pdf
-		function convertMatrixToDualQuat(matrix4x4) {
+        // Convert a 4x4 matrix4x4 into a dual quaternion
+        //  recommended reading: https://www.cs.utah.edu/~ladislav/kavan07skinning/kavan07skinning.pdf
+		function convertMatrixToDualQuat(matrix4x4) 
+        {
 			var rotationmatrix4x4 = mat3FromMat4([], matrix4x4)
-				var rotationQuat = quatFromMat3([], rotationmatrix4x4)
+            var rotationQuat = quatFromMat3([], rotationmatrix4x4)
 
-				var transVec = [matrix4x4[12], matrix4x4[13], matrix4x4[14], 0]
-				var transQuat = quatScale([], quatMultiply([], transVec, rotationQuat), 0.5)
+            var transVec = [matrix4x4[12], matrix4x4[13], matrix4x4[14], 0]
+            var transQuat = quatScale([], quatMultiply([], transVec, rotationQuat), 0.5)
 
-				return [
-					rotationQuat[0],
-					rotationQuat[1],
-					rotationQuat[2],
-					rotationQuat[3],
-					transQuat[0],
-					transQuat[1],
-					transQuat[2],
-					transQuat[3]
-				]
+            return [
+                rotationQuat[0],
+                rotationQuat[1],
+                rotationQuat[2],
+                rotationQuat[3],
+                transQuat[0],
+                transQuat[1],
+                transQuat[2],
+                transQuat[3]
+            ]
 		}
 
 	}, {
@@ -1627,7 +1674,10 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		"gl-quat/multiply": 13,
 		"gl-quat/scale": 14
 	}
-], 29: [function (require, module, exports) {
+], /**
+    *  drmayo controla y calcula el tiempo actual en que se encuentra
+    **/
+    29: [function (require, module, exports) {
 		(function (process) {
 			// Generated by CoffeeScript 1.12.2
 			(function () {
@@ -1673,18 +1723,24 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 	}, {
 		"_process": 38
 	}
+    
+    /**
+    *  drmayo Clase Motor para controlar o movilizar la animacion de acuerdo al tick 
+    *    y al tiempo actual
+    **/
 ], 30: [function (require, module, exports) {
 		var inherits = require('inherits')
 			var EventEmitter = require('events').EventEmitter
 			var now = require('right-now')
 			var raf = require('raf')
 
-			/**
-			 ** drmayor encargada de empezar, parar y animar de acuerdo al tick
-			 **/
+        /**
+         ** drmayo encargada de empezar, parar y animar de acuerdo al tick
+         **/
 
-			module.exports = Engine
+        module.exports = Engine
 		function Engine(fn) {
+            
 			if (!(this instanceof Engine))
 				return new Engine(fn)
 				this.running = false
@@ -1728,7 +1784,12 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		"raf": 31,
 		"right-now": 32
 	}
-], 31: [function (require, module, exports) {
+    
+], 
+    /**
+    *  drmayo Modulo raf
+    **/
+    31: [function (require, module, exports) {
 		(function (global) {
 			var now = require('performance-now'),
 			root = typeof window === 'undefined' ? global : window,
@@ -1809,7 +1870,11 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 	}, {
 		"performance-now": 29
 	}
-], 32: [function (require, module, exports) {
+], 
+    /**
+    * drmayo valor del tiempo actual
+    */
+    32: [function (require, module, exports) {
 		(function (global) {
 			module.exports =
 				global.performance &&
@@ -1822,13 +1887,20 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 
 		}).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 	}, {}
-], 33: [function (require, module, exports) {
+], /**
+    *  drmayo importa el script de animation system
+    **/
+    33: [function (require, module, exports) {
 		module.exports = require('./src/skeletal-animation-system')
 
 	}, {
 		"./src/skeletal-animation-system": 36
 	}
-], 34: [function (require, module, exports) {
+], 
+    /**
+    * drmayo funcion clave: interpolacion entre dos cuaterniones
+    **/
+    34: [function (require, module, exports) {
 		// TODO: Pull this out into it's standalone own open source repo
 		module.exports = blendDualQuaternions
 
@@ -1904,7 +1976,12 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		}
 
 	}, {}
-], 35: [function (require, module, exports) {
+], 
+
+    /**
+    * drTODO  
+    **/
+    35: [function (require, module, exports) {
 		module.exports = getPreviousAnimationData
 
 		function getPreviousAnimationData(opts, keyframeTimes) {
@@ -1969,7 +2046,11 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		}
 
 	}, {}
-], 36: [function (require, module, exports) {
+], 
+    /**
+    * Interpolar articulaciones a partir del keyframe anterior y de los cuterniones dobles de cada articulacion entre keyframe definido
+    **/
+    36: [function (require, module, exports) {
 		var blendDualQuaternions = require('./blend-dual-quaternions.js')
 
 			module.exports = {
@@ -2141,7 +2222,12 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		"./blend-dual-quaternions.js": 34,
 		"./get-previous-animation-data.js": 35
 	}
-], 37: [function (require, module, exports) {
+], 
+    /**
+     *  drmayo Clase con responsabilidad EventListener para ejecucion de Node
+     **/
+    37
+    : [function (require, module, exports) {
 		// Copyright Joyent, Inc. and other Node contributors.
 		//
 		// Permission is hereby granted, free of charge, to any person obtaining a
@@ -2164,9 +2250,7 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		// USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-		/**
-		 *  drmayor Clase con responsabilidad EventListener
-		 **/
+		
 		function EventEmitter() {
 			this._events = this._events || {};
 			this._maxListeners = this._maxListeners || undefined;
@@ -2460,7 +2544,11 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		}
 
 	}, {}
-], 38: [function (require, module, exports) {
+], 
+    /**
+    *   Calculo del tiempo actual en el browser
+    **/
+    38: [function (require, module, exports) {
 		// shim for using process in browser
 
 		var process = module.exports = {};
@@ -2468,7 +2556,7 @@ texture.src = '/assets/skeletal-animation/cowboy-texture.png'
 		// cached from whatever global is present so that test runners that stub it
 		// don't break things.  But we need to wrap it in a try catch in case it is
 		// wrapped in strict mode code which doesn't define any globals.  It's inside a
-		// function because try/catches deoptimize in certain engines.
+		// function because try/catches deoptimize in certain e ngines.
 
 		var cachedSetTimeout;
 		var cachedClearTimeout;

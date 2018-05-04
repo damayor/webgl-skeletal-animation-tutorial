@@ -183,7 +183,8 @@ function defaultBlend (dt) {
 /**
 
 1. Cowboy.JSON importado (quemado en el codigo)
-2.  canvas, gl
+2. Main !
+    canvas, gl
     playbackSlider: acelerar o ralenjtizar
     demoLocation se inserta en la web page
     cowboyJSON toda la informaci󮠤el personaje:
@@ -197,59 +198,55 @@ function defaultBlend (dt) {
         crea las variables uniformes (luz ambientes y matrices MVP)
         interpolatedJoints. articulaciones interpoladas entre keyfame y keyframe
             18x8 floats. 
-3.  getAtributesUniforms //todo
+3.  getAtributesUniforms
     funciones de manejo de matrices retornar una mat3, crear una mat4, multiplica dos mat4 (4,5,6)
     mat perspective, rotateX, rotateY, rotateZ, translate 7,8,9,10,11
     manejo de quaternions: quat desde mat3, mult quat, escala - 12,13,14
     manejo de vectores: normaliza , escalar 15, 16,17
 18. manejo de node.js, funcion inherits 
-19  mat4 to dual quat!!      
-        convertconvertKeyframesToDualQuats!!
-    drawModel, el draw con el gl, data, donde se conectan los atributos y uniformes
+19  convertKeyframesToDualQuats!! convierte cada matriz de cada keyframe en quaterniones dobles ***
+20  drawModel, el draw con el gl, data, donde se conectan los atributos y uniformes!
         texture
-        normals, joings, weights, uniforms
+        conectaados los atributos de de normals, joints, weights y las variables uniforms como las matrices y la luz
+        El modelo es dibujado a punta de triangulos
         luz
         MV y P Matrix
         dibujar Elements (triangles)
-    createDrawFunction. lo crea en GLSL ? 
+21  createDrawFunction. crea los datos necesarios para dibujar en Javascript
         allUniform: cada uniform crea un JS string
-    expandVertces
-    initTexture
-    loadColladaDae
-    createBuffer
-    generateFragmentShader genera el fragmentShader en GLSL
-    generateShader
-    generateVertexShader
-    convertMatrixToDualQuat !!!
-    function (process) para el tiempo?
-    Clase Engine. Dedicada a movilizar la animacion de acuerdo a un tick
-    module. Ixtant que significa
-    blendDualQuaternions, la clave de que sean 8 en vez de 16 floats?
+22  expandVertces, nada que ver ni interesante
+23  initTexture
+24  loadColladaDae, 
+        shader tiene vertexPos, vertexNormal, jointIndex, joingWeight, vertexPosotinIndexBuffer y textura en dado caso
+        createBuffer
+25  generateFragmentShader genera el fragmentShader en GLSL
+26  generateShader genera el shader con los strings de ambos shaders
+27  generateVertexShader
+28  convertMatrixToDualQuat !!!
+        crea una matriz 3x3 a partir de una matriz 4x4
+        4.12.13.14
+        un quaternion correponde a la rotacion, otro a la traslacion
+        
+        
+29  performance-now: define el tiempo actual 
+30*  raf-loop: Clase Engine. Dedicada a movilizar la animacion de acuerdo a un tick
+31  el famoso raf
+32  right now
+33  imoprt skeletal anumation system 
+    
+34*  blendDualQuaternions "interpolan" cuaterniones
         lerpDualQuaternions, lerpNegatedDialQuaternions
-    getPreviousanomiationData
-    interpolatedJoints!
+35*  getPreviousAnimiationData TODO debug a ver que eslo que sale
+36*  interpolatedJoints!! Interpolar joints entre keyframes interpolando los cuaterniones
         defaultBlend: segundos entre la ultima animacion y ya
-    Clase EvenEmitter: clase que maneja responsabilidades tipo EventListener
-    process 
+37  Clase EvenEmitter: clase que maneja responsabilidades tipo EventListener para ejecucion de Node
+38  process calculo del tiempo actual en el browser
     
        
 
 **/
 
 
-//boneRot y boneTrans de donde? del keyframe 0,4 y 5,7
-
-/**
-    JSON
-        24 keyframes x cada articulacion (18) x 16 (matrix de 4x4)
-        peso entre pares de joints
-
-    
-    raf-loop:re dibuja cada vez que el browser esta listo. en otras palabras, anima
-    
-    
-    **/
-        
 
 
 
